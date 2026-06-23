@@ -9,62 +9,33 @@ Sessions 1 and 2 can run in parallel (separate terminals).
 ## Session 0 — Scaffold
 
 **Branch:** `chore/scaffold`
+**Status:** ✅ DONE — PR #1 open
 
-```
-Read CLAUDE.md.
+> This session is complete. Notes below reflect what was actually built.
 
-Bootstrap the project:
+### What was built
 
-1. Run: npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir=no --import-alias="@/*"
-   (run in the current directory — files already exist here)
+- Next.js 15 + React 18 (stable)
+- Tailwind v4 — no `tailwind.config.ts`; content sources declared in `app/globals.css` via `@source` directives
+- Zustand, clsx, tailwind-merge, lucide-react, zod
+- Vitest 2 + React Testing Library + jsdom (`vitest.config.ts` + `vitest.setup.ts`)
+- `lib/cn.ts` utility
+- Pre-written `lib/` files already in place (types.ts, calculations.ts, api.ts, data/products.ts)
+- Inter font configured in `app/layout.tsx`
+- Prettier (`.prettierrc`) enforced as ESLint errors via `eslint-plugin-prettier`
+- ESLint flat config (`eslint.config.mjs`) using `FlatCompat` bridge (required because `eslint-config-next@15` ships a legacy config, not a flat array)
+- Husky pre-commit → `lint-staged` (ESLint + Prettier on staged `.ts/.tsx` files only)
+- Husky pre-push → `typecheck` + full test suite
+- GitHub Actions CI (`.github/workflows/ci.yml`): format-check → lint → typecheck → test on every push/PR
+- VS Code workspace settings for format-on-save + ESLint auto-fix (`.vscode/settings.json`)
 
-2. Install additional dependencies:
-   npm install zustand clsx tailwind-merge lucide-react zod
-   npm install -D vitest @vitest/ui @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom @vitejs/plugin-react
+### Key deviations from original spec
 
-3. Configure Vitest — create vitest.config.ts:
-   import { defineConfig } from 'vitest/config';
-   import react from '@vitejs/plugin-react';
-   import path from 'path';
-   export default defineConfig({
-     plugins: [react()],
-     test: {
-       environment: 'jsdom',
-       globals: true,
-       setupFiles: ['./vitest.setup.ts'],
-     },
-     resolve: {
-       alias: { '@': path.resolve(__dirname, '.') },
-     },
-   });
-
-4. Create vitest.setup.ts:
-   import '@testing-library/jest-dom';
-
-5. Add to package.json scripts:
-   "test": "vitest run",
-   "test:watch": "vitest",
-   "typecheck": "tsc --noEmit"
-
-6. Create lib/cn.ts:
-   import { clsx, type ClassValue } from 'clsx';
-   import { twMerge } from 'tailwind-merge';
-   export function cn(...inputs: ClassValue[]) { return twMerge(clsx(inputs)); }
-
-7. Copy pre-written files into place (already exist):
-   - lib/types.ts ✓
-   - lib/calculations.ts ✓
-   - lib/api.ts ✓
-   - lib/data/products.ts ✓
-
-8. Update tailwind.config.ts per specs/07-layout.md.
-
-9. Run: npm run typecheck — fix all errors.
-10. Run: npm run lint — fix all errors.
-
-Commit: chore: scaffold Next.js 15 with Tailwind, Zustand, Vitest
-Push chore/scaffold. Open PR.
-```
+1. **Tailwind v4 instead of v3** — `create-next-app` now scaffolds with v4. Step 8 ("Update tailwind.config.ts") does not apply; configuration is in `globals.css` instead.
+2. **Extra dev dependencies** beyond the spec: `prettier`, `eslint-config-prettier`, `eslint-plugin-prettier`, `husky`, `lint-staged`, `@eslint/eslintrc`
+3. **Extra scripts**: `"lint:fix"`, `"format"`, `"format:check"`, `"prepare": "husky"`
+4. **`passWithNoTests: true`** in `vitest.config.ts` — prevents pre-push hook failing before any test files exist
+5. **Vitest pinned to v2** — v4 (latest) had a CJS/ESM startup bug on Node 20.17
 
 ---
 
