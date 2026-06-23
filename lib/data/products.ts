@@ -187,9 +187,8 @@ export const CATEGORIES: Category[] = [
 
 export const INITIAL_SINGLE_QTY: Record<string, number> = {
   'plan-standard': 1,
+  'sensor-door': 2,
+  'extra-keypad': 1,
 };
 
-export const INITIAL_VARIANT_QTY: Record<string, Record<string, number>> = {
-  'sensor-door': { 'sensor-door': 2 },
-  'extra-keypad': { 'extra-keypad': 1 },
-};
+export const INITIAL_VARIANT_QTY: Record<string, Record<string, number>> = {};
