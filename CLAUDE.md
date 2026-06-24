@@ -143,15 +143,47 @@ Never commit failing checks.
 - Every component: co-located `ComponentName.test.tsx`.
 - No prop drilling for quantities — leaf components read directly from Zustand.
 
-### Styling — Tailwind design tokens
+### Styling — color tokens (defined in app/globals.css `@theme`)
 
-- Primary blue: `#1A56DB` → `blue-600`
-- Selected card border: `border-2 border-blue-600`
-- Default card border: `border border-gray-200`
-- Card bg: `bg-white`, `rounded-2xl`, `shadow-sm`
-- Step header bg: `bg-gray-50`
-- Badge: `bg-green-100 text-green-800`
-- Body text: `text-gray-900`, muted: `text-gray-500`
+All tokens are available as Tailwind utilities: `bg-brand-600`, `text-brand-600`, `border-brand-600` etc.
+
+**Brand purple scale** (source: Figma "Old/CP-CPP/Purple 01" `#4E2FD2`):
+
+| Token                                           | Hex       | Usage                                                  |
+| ----------------------------------------------- | --------- | ------------------------------------------------------ |
+| `brand-600`                                     | `#4E2FD2` | Primary — CTA buttons, selected borders, links, prices |
+| `brand-900`                                     | `#1B1A55` | Badge background (dark navy)                           |
+| `brand-50`→`brand-500`, `brand-700`→`brand-950` | —         | Available for tints/shades                             |
+
+**Surface tokens**:
+
+| Token            | Hex       | Usage                                        |
+| ---------------- | --------- | -------------------------------------------- |
+| `surface-active` | `#EDF4FF` | Active accordion step bg, selected highlight |
+| `surface-card`   | `#FFFFFF` | Product card, review panel bg                |
+| `surface-subtle` | `#F9FAFB` | Collapsed step headers                       |
+
+**Semantic tokens**:
+
+| Token             | Hex       | Usage                             |
+| ----------------- | --------- | --------------------------------- |
+| `price-compare`   | `#F97316` | Compare-at (strikethrough) price  |
+| `border-default`  | `#E5E7EB` | Default card/input borders        |
+| `border-selected` | `#4E2FD2` | Selected card border              |
+| `text-primary`    | `#111827` | Body text                         |
+| `text-muted`      | `#6B7280` | Descriptions, secondary text      |
+| `text-link`       | `#4E2FD2` | Links ("Learn more")              |
+| `text-on-brand`   | `#FFFFFF` | Text on brand-colored backgrounds |
+
+**Component quick-reference**:
+
+- Card selected: `border-2 border-brand-600` / unselected: `border border-border-default`
+- Card layout: horizontal `flex flex-row gap-3`, image `w-16 h-16`, content `flex-1`
+- Badge: `bg-brand-900 text-text-on-brand text-xs font-semibold`
+- Current price: `text-brand-600 font-semibold`
+- Compare-at price: `text-price-compare line-through`
+- Step header bg: `bg-surface-subtle`
+- Active step bg: `bg-surface-active`
 - Font: Inter (next/font/google)
 
 ### Route Handlers
