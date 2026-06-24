@@ -149,8 +149,11 @@ Never commit failing checks.
 - Selected card border: `border-2 border-blue-600`
 - Default card border: `border border-gray-200`
 - Card bg: `bg-white`, `rounded-2xl`, `shadow-sm`
+- Card layout: horizontal — `flex flex-row gap-3`, image left (~w-16 h-16), content right
 - Step header bg: `bg-gray-50`
-- Badge: `bg-green-100 text-green-800`
+- Badge: `bg-indigo-900 text-white text-xs font-semibold` (dark navy — NOT green, corrected from Figma)
+- Compare-at price: `text-orange-500 line-through` (NOT gray — corrected from Figma)
+- Current price: `text-blue-700 font-semibold`
 - Body text: `text-gray-900`, muted: `text-gray-500`
 - Font: Inter (next/font/google)
 
