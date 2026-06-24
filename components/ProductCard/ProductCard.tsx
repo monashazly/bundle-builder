@@ -46,12 +46,12 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div
       className={cn(
-        'relative flex flex-row gap-3 p-4 bg-white rounded-2xl shadow-sm transition-colors cursor-default',
-        isSelected ? 'border-2 border-blue-600' : 'border border-gray-200'
+        'relative flex flex-row gap-3 p-4 bg-surface-card rounded-2xl shadow-sm transition-colors cursor-default',
+        isSelected ? 'border-2 border-border-selected' : 'border border-border-default'
       )}
     >
       {product.badge && (
-        <span className="absolute top-3 left-3 z-10 bg-indigo-900 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+        <span className="absolute top-3 left-3 z-10 bg-brand-900 text-text-on-brand text-xs font-semibold px-2 py-0.5 rounded-full">
           {product.badge}
         </span>
       )}
@@ -69,13 +69,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
       {/* Right: content */}
       <div className="flex flex-col flex-1 min-w-0">
-        <p className="font-medium text-gray-900 text-sm mt-1">{product.name}</p>
-        <p className="text-xs text-gray-500 mt-1 leading-snug">{product.description}</p>
+        <p className="font-medium text-text-primary text-sm mt-1">{product.name}</p>
+        <p className="text-xs text-text-muted mt-1 leading-snug">{product.description}</p>
 
         {product.learnMoreUrl && (
           <a
             href={product.learnMoreUrl}
-            className="text-xs text-blue-600 mt-1 hover:underline w-fit"
+            className="text-xs text-text-link mt-1 hover:underline w-fit"
           >
             Learn more
           </a>
@@ -96,11 +96,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <div className="flex items-center gap-1.5">
             {product.compareAtPrice && (
-              <span className="text-xs text-orange-500 line-through">
+              <span className="text-xs text-price-compare line-through">
                 {formatPrice(product.compareAtPrice)}
               </span>
             )}
-            <span className="text-sm font-semibold text-blue-700">
+            <span className="text-sm font-semibold text-brand-600">
               {formatPrice(product.price)}
             </span>
           </div>

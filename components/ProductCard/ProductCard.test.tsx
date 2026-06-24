@@ -90,14 +90,14 @@ describe('ProductCard', () => {
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
-  it('card gets blue border when qty > 0', async () => {
+  it('card gets selected border when qty > 0', async () => {
     const { container } = render(<ProductCard product={productWithVariants} />);
     await userEvent.click(screen.getByRole('button', { name: /increase/i }));
-    expect(container.firstChild).toHaveClass('border-blue-600');
+    expect(container.firstChild).toHaveClass('border-border-selected');
   });
 
-  it('card has gray border when all qty === 0', () => {
+  it('card has default border when all qty === 0', () => {
     const { container } = render(<ProductCard product={productWithVariants} />);
-    expect(container.firstChild).toHaveClass('border-gray-200');
+    expect(container.firstChild).toHaveClass('border-border-default');
   });
 });

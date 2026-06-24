@@ -24,8 +24,8 @@ export function VariantSelector({ variants, selectedVariantId, onSelect }: Varia
             className={cn(
               'flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-sm cursor-pointer transition-colors',
               isSelected
-                ? 'border-blue-600 bg-blue-50 text-blue-700'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400'
+                ? 'border-brand-600 bg-brand-50 text-brand-700'
+                : 'border-border-default bg-surface-card text-text-primary hover:border-gray-400'
             )}
           >
             <span
