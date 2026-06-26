@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String    @id
+  label     String
+  stepIndex Int
+  products  Product[]
+}
+
+model Product {
+  id             String   @id
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])
+  name           String
+  description    String
+  image          String
+  badge          String?
+  compareAtPrice Float?
+  price          Float
+  learnMoreUrl   String?
+  position       Int
+  variants       Variant[]
+}
+
+model Variant {
+  id        String  @id
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  label     String
+  color     String
+}
+
+model Config {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  items     String   // JSON string — SQLite has no native JSON column type
+}

@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useBundleStore } from './bundleStore';
 
 vi.mock('@/lib/api', () => ({
-  fetchInitialData: vi.fn(),
+  fetchCatalog: vi.fn(),
 }));
 
-import { fetchInitialData } from '@/lib/api';
+import { fetchCatalog } from '@/lib/api';
 
 const mockCategories = [
   {
@@ -37,13 +37,10 @@ beforeEach(() => {
     variantQty: {},
     singleQty: {},
   });
-  localStorage.clear();
   vi.clearAllMocks();
 });
 
-afterEach(() => {
-  localStorage.clear();
-});
+afterEach(() => {});
 
 describe('decrementVariant', () => {
   it('stays at 0 when qty is already 0', () => {
@@ -63,9 +60,9 @@ describe('decrementSingle', () => {
 });
 
 describe('setActiveStep', () => {
-  it('ignores step 0 — step stays at 1', () => {
+  it('allows step 0 — closes all accordion steps', () => {
     useBundleStore.getState().setActiveStep(0);
-    expect(useBundleStore.getState().activeStep).toBe(1);
+    expect(useBundleStore.getState().activeStep).toBe(0);
   });
 
   it('ignores step 5 — step stays at current value', () => {
@@ -82,26 +79,9 @@ describe('incrementVariant', () => {
   });
 });
 
-describe('localStorage round-trip', () => {
-  it('restores variantQty after save and load', () => {
-    useBundleStore.getState().incrementVariant('cam-outdoor-pro', 'cam-outdoor-pro-black');
-    useBundleStore.getState().saveToLocalStorage();
-
-    useBundleStore.setState({ variantQty: {}, singleQty: {} });
-
-    useBundleStore.getState().loadFromLocalStorage();
-    const qty = useBundleStore.getState().variantQty['cam-outdoor-pro']?.['cam-outdoor-pro-black'];
-    expect(qty).toBe(1);
-  });
-});
-
 describe('init()', () => {
   it('sets categories and loading: false on success', async () => {
-    vi.mocked(fetchInitialData).mockResolvedValue({
-      categories: mockCategories,
-      initialSingleQty: {},
-      initialVariantQty: {},
-    });
+    vi.mocked(fetchCatalog).mockResolvedValue({ categories: mockCategories });
 
     await useBundleStore.getState().init();
 
@@ -112,7 +92,7 @@ describe('init()', () => {
   });
 
   it('sets error and loading: false on fetch failure', async () => {
-    vi.mocked(fetchInitialData).mockRejectedValue(new Error('Network error'));
+    vi.mocked(fetchCatalog).mockRejectedValue(new Error('Network error'));
 
     await useBundleStore.getState().init();
 

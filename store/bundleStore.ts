@@ -1,8 +1,14 @@
 'use client';
 
-import { fetchInitialData } from '@/lib/api';
+import { fetchCatalog, fetchConfig } from '@/lib/api';
 import type { Category } from '@/lib/types';
 import { create } from 'zustand';
+
+const DEFAULT_SINGLE_QTY: Record<string, number> = {
+  'plan-standard': 1,
+  'sensor-door': 2,
+  'extra-keypad': 1,
+};
 
 interface BundleStore {
   categories: Category[];
@@ -21,11 +27,9 @@ interface BundleStore {
   setVariantQty: (productId: string, variantId: string, qty: number) => void;
   incrementSingle: (productId: string) => void;
   decrementSingle: (productId: string) => void;
-  saveToLocalStorage: () => void;
-  loadFromLocalStorage: () => void;
 }
 
-export const useBundleStore = create<BundleStore>((set, get) => ({
+export const useBundleStore = create<BundleStore>((set) => ({
   categories: [],
   loading: false,
   error: null,
@@ -35,25 +39,38 @@ export const useBundleStore = create<BundleStore>((set, get) => ({
 
   init: async () => {
     set({ loading: true, error: null });
-    get().loadFromLocalStorage();
 
     try {
-      const { categories, initialSingleQty, initialVariantQty } = await fetchInitialData();
+      const { categories } = await fetchCatalog();
 
-      const currentSingle = get().singleQty;
-      const currentVariant = get().variantQty;
+      const urlConfigId = new URLSearchParams(window.location.search).get('config') ?? undefined;
+      const configId = urlConfigId ?? localStorage.getItem('bundle-config-id') ?? undefined;
 
-      const mergedSingle = { ...initialSingleQty, ...currentSingle };
-
-      const mergedVariant = { ...initialVariantQty };
-      for (const productId of Object.keys(currentVariant)) {
-        mergedVariant[productId] = {
-          ...(initialVariantQty[productId] ?? {}),
-          ...currentVariant[productId],
-        };
+      if (configId) {
+        try {
+          const items = await fetchConfig(configId);
+          const variantQty: Record<string, Record<string, number>> = {};
+          const singleQty: Record<string, number> = {};
+          for (const item of items) {
+            if (item.variantId) {
+              variantQty[item.productId] ??= {};
+              variantQty[item.productId][item.variantId] = item.qty;
+            } else {
+              singleQty[item.productId] = item.qty;
+            }
+          }
+          set({ categories, variantQty, singleQty, loading: false });
+        } catch {
+          localStorage.removeItem('bundle-config-id');
+          const defaults = { ...DEFAULT_SINGLE_QTY };
+          localStorage.setItem('bundle-default-qty', JSON.stringify(defaults));
+          set({ categories, singleQty: defaults, loading: false });
+        }
+      } else {
+        const defaults = { ...DEFAULT_SINGLE_QTY };
+        localStorage.setItem('bundle-default-qty', JSON.stringify(defaults));
+        set({ categories, singleQty: defaults, loading: false });
       }
-
-      set({ categories, singleQty: mergedSingle, variantQty: mergedVariant, loading: false });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load products';
       set({ error: message, loading: false });
@@ -61,82 +78,53 @@ export const useBundleStore = create<BundleStore>((set, get) => ({
   },
 
   setActiveStep: (step) => {
-    if (step < 1 || step > 4) return;
+    if (step < 0 || step > 4) return;
     set({ activeStep: step });
   },
 
-  incrementVariant: (productId, variantId) => {
-    const { variantQty } = get();
-    const current = variantQty[productId]?.[variantId] ?? 0;
-    set({
-      variantQty: {
-        ...variantQty,
-        [productId]: { ...(variantQty[productId] ?? {}), [variantId]: current + 1 },
-      },
-    });
-    get().saveToLocalStorage();
-  },
-
-  decrementVariant: (productId, variantId) => {
-    const { variantQty } = get();
-    const current = variantQty[productId]?.[variantId] ?? 0;
-    set({
-      variantQty: {
-        ...variantQty,
-        [productId]: { ...(variantQty[productId] ?? {}), [variantId]: Math.max(0, current - 1) },
-      },
-    });
-    get().saveToLocalStorage();
-  },
-
-  setVariantQty: (productId, variantId, qty) => {
-    const { variantQty } = get();
-    set({
-      variantQty: {
-        ...variantQty,
-        [productId]: { ...(variantQty[productId] ?? {}), [variantId]: Math.max(0, qty) },
-      },
-    });
-    get().saveToLocalStorage();
-  },
-
-  incrementSingle: (productId) => {
-    const { singleQty } = get();
-    set({ singleQty: { ...singleQty, [productId]: (singleQty[productId] ?? 0) + 1 } });
-    get().saveToLocalStorage();
-  },
-
-  decrementSingle: (productId) => {
-    const { singleQty } = get();
-    set({
-      singleQty: { ...singleQty, [productId]: Math.max(0, (singleQty[productId] ?? 0) - 1) },
-    });
-    get().saveToLocalStorage();
-  },
-
-  saveToLocalStorage: () => {
-    try {
-      const { variantQty, singleQty } = get();
-      localStorage.setItem('bundle-qty', JSON.stringify({ variantQty, singleQty }));
-    } catch {
-      // localStorage unavailable in some environments
-    }
-  },
-
-  loadFromLocalStorage: () => {
-    try {
-      const raw = localStorage.getItem('bundle-qty');
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as {
-        variantQty: Record<string, Record<string, number>>;
-        singleQty: Record<string, number>;
+  incrementVariant: (productId, variantId) =>
+    set((state) => {
+      const current = state.variantQty[productId]?.[variantId] ?? 0;
+      return {
+        variantQty: {
+          ...state.variantQty,
+          [productId]: { ...(state.variantQty[productId] ?? {}), [variantId]: current + 1 },
+        },
       };
-      set((state) => ({
-        variantQty: { ...state.variantQty, ...parsed.variantQty },
-        singleQty: { ...state.singleQty, ...parsed.singleQty },
-      }));
-    } catch {
-      // malformed JSON or localStorage unavailable
-    }
-  },
+    }),
+
+  decrementVariant: (productId, variantId) =>
+    set((state) => {
+      const current = state.variantQty[productId]?.[variantId] ?? 0;
+      return {
+        variantQty: {
+          ...state.variantQty,
+          [productId]: {
+            ...(state.variantQty[productId] ?? {}),
+            [variantId]: Math.max(0, current - 1),
+          },
+        },
+      };
+    }),
+
+  setVariantQty: (productId, variantId, qty) =>
+    set((state) => ({
+      variantQty: {
+        ...state.variantQty,
+        [productId]: { ...(state.variantQty[productId] ?? {}), [variantId]: Math.max(0, qty) },
+      },
+    })),
+
+  incrementSingle: (productId) =>
+    set((state) => ({
+      singleQty: { ...state.singleQty, [productId]: (state.singleQty[productId] ?? 0) + 1 },
+    })),
+
+  decrementSingle: (productId) =>
+    set((state) => ({
+      singleQty: {
+        ...state.singleQty,
+        [productId]: Math.max(0, (state.singleQty[productId] ?? 0) - 1),
+      },
+    })),
 }));

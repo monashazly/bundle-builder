@@ -145,23 +145,23 @@ Never commit failing checks.
 
 ### Styling — color tokens (defined in app/globals.css `@theme`)
 
-All tokens are available as Tailwind utilities: `bg-brand-600`, `text-brand-600`, `border-brand-600` etc.
+All tokens are available as Tailwind utilities: `bg-prim-600`, `text-prim-600`, `border-prim-600` etc.
 
 **Brand purple scale** (source: Figma "Old/CP-CPP/Purple 01" `#4E2FD2`):
 
-| Token                                           | Hex       | Usage                                                  |
-| ----------------------------------------------- | --------- | ------------------------------------------------------ |
-| `brand-600`                                     | `#4E2FD2` | Primary — CTA buttons, selected borders, links, prices |
-| `brand-900`                                     | `#1B1A55` | Badge background (dark navy)                           |
-| `brand-50`→`brand-500`, `brand-700`→`brand-950` | —         | Available for tints/shades                             |
+| Token                                       | Hex       | Usage                                                  |
+| ------------------------------------------- | --------- | ------------------------------------------------------ |
+| `prim-600`                                  | `#4E2FD2` | Primary — CTA buttons, selected borders, links, prices |
+| `prim-900`                                  | `#1B1A55` | Badge background (dark navy)                           |
+| `prim-50`→`prim-500`, `prim-700`→`prim-950` | —         | Available for tints/shades                             |
 
 **Surface tokens**:
 
-| Token            | Hex       | Usage                                        |
-| ---------------- | --------- | -------------------------------------------- |
-| `surface-active` | `#EDF4FF` | Active accordion step bg, selected highlight |
-| `surface-card`   | `#FFFFFF` | Product card, review panel bg                |
-| `surface-subtle` | `#F9FAFB` | Collapsed step headers                       |
+| Token              | Hex       | Usage                                        |
+| ------------------ | --------- | -------------------------------------------- |
+| `secondary-active` | `#EDF4FF` | Active accordion step bg, selected highlight |
+| `secondary-card`   | `#FFFFFF` | Product card, review panel bg                |
+| `secondary-subtle` | `#F9FAFB` | Collapsed step headers                       |
 
 **Semantic tokens**:
 
@@ -175,16 +175,9 @@ All tokens are available as Tailwind utilities: `bg-brand-600`, `text-brand-600`
 | `text-link`       | `#4E2FD2` | Links ("Learn more")              |
 | `text-on-brand`   | `#FFFFFF` | Text on brand-colored backgrounds |
 
-**Component quick-reference**:
+## Styles
 
-- Card selected: `border-2 border-brand-600` / unselected: `border border-border-default`
-- Card layout: horizontal `flex flex-row gap-3`, image `w-16 h-16`, content `flex-1`
-- Badge: `bg-brand-900 text-text-on-brand text-xs font-semibold`
-- Current price: `text-brand-600 font-semibold`
-- Compare-at price: `text-price-compare line-through`
-- Step header bg: `bg-surface-subtle`
-- Active step bg: `bg-surface-active`
-- Font: Inter (next/font/google)
+Do not modify any styles, classNames, or CSS — all styling is done manually by the developer.
 
 ### Route Handlers
 
@@ -201,7 +194,7 @@ All tokens are available as Tailwind utilities: `bg-brand-600`, `text-brand-600`
 1. `npm run typecheck` — clean
 2. `npm run lint` — clean
 3. `npm run test` — all passing
-4. Commit with proper message
+4. Commit with proper message after my permission
 5. Push branch
 6. Open PR using the template
 7. Report: "Done. Branch `feat/xxx`, PR opened. N tests passing."

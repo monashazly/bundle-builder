@@ -93,7 +93,7 @@ describe('ProductCard', () => {
   it('card gets selected border when qty > 0', async () => {
     const { container } = render(<ProductCard product={productWithVariants} />);
     await userEvent.click(screen.getByRole('button', { name: /increase/i }));
-    expect(container.firstChild).toHaveClass('border-border-selected');
+    expect(container.firstChild).toHaveClass('border-[rgba(78,47,210,0.7)]');
   });
 
   it('card has default border when all qty === 0', () => {

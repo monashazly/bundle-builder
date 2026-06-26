@@ -3,38 +3,96 @@
 @source '../components/**/*.{ts,tsx}';
 @source '../lib/**/*.{ts,tsx}';
 
+/* Used by @layer base typography rules below */
+:root {
+  --font-size: 16px;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+}
+
 @theme inline {
   /* ── Typography ─────────────────────────────── */
   --font-sans: 'Inter', system-ui, sans-serif;
 
   /* ── Brand purple scale ──────────────────────── */
-  /* Source: Figma "Old/CP-CPP/Purple 01" */
-  --color-brand-50: #f3f0fc;
-  --color-brand-100: #e4dcf8;
-  --color-brand-200: #ccbff3;
-  --color-brand-300: #aa93eb;
-  --color-brand-400: #8560e0;
-  --color-brand-500: #6840d7;
-  --color-brand-600: #4e2fd2; /* ← primary */
-  --color-brand-700: #3e24a8;
-  --color-brand-800: #2e1b80;
-  --color-brand-900: #1b1a55; /* ← badge bg, dark navy */
-  --color-brand-950: #0e0d30;
+  --color-prim-50: #f3f0fc;
+  --color-prim-100: #e4dcf8;
+  --color-prim-200: #ccbff3;
+  --color-prim-300: #aa93eb;
+  --color-prim-400: #8560e0;
+  --color-prim-500: #6840d7;
+  --color-prim-600: #4e2fd2;
+  --color-prim-700: #3e24a8;
+  --color-prim-800: #2e1b80;
+  --color-prim-900: #1b1a55;
+  --color-prim-950: #0e0d30;
 
   /* ── Surface tokens ─────────────────────────── */
-  /* Source: Figma #EDF4FF light-blue surface */
-  --color-surface-active: #edf4ff; /* active accordion step, selected bg */
-  --color-surface-card: #ffffff;
-  --color-surface-subtle: #f9fafb; /* collapsed step headers */
+  --color-secondary-active: #edf4ff;
+  --color-secondary-card: #ffffff;
+  --color-secondary-subtle: #f9fafb;
 
   /* ── Semantic / UI tokens ───────────────────── */
-  --color-price-compare: #f97316; /* orange-500 — strikethrough compare-at price */
-  --color-border-default: #e5e7eb; /* gray-200 */
-  --color-border-selected: #4e2fd2; /* brand-600 */
+  --color-price-compare: #f97316;
+  --color-price-card-compare: #d8392b;
+  --color-price-card-current: #575757;
+  --color-savings: #0aa288;
+  --color-border-default: #e5e7eb;
+  --color-border-selected: #4e2fd2;
+  --color-border-panel: #ced6de;
 
   /* ── Text tokens ────────────────────────────── */
-  --color-text-primary: #111827; /* gray-900 */
-  --color-text-muted: #6b7280; /* gray-500 */
-  --color-text-link: #4e2fd2; /* brand-600 */
+  --color-text-primary: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-link: #4e2fd2;
   --color-text-on-brand: #ffffff;
+  --color-text-step: #484848;
+  --color-text-obsidian: #0b0d10;
+}
+
+@layer base {
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
 }

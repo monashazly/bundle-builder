@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     passWithNoTests: true,
+    env: { DATABASE_URL: 'file:./test.db' },
   },
   resolve: {
     alias: { '@': path.resolve(__dirname, '.') },
