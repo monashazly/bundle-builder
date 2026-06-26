@@ -6,7 +6,7 @@ import { AccordionStep } from './AccordionStep';
 export function Accordion() {
   const categories = useBundleStore((s) => s.categories);
   const activeStep = useBundleStore((s) => s.activeStep);
-  const setActiveStep = useBundleStore((s) => s.setActiveStep);
+  const { setActiveStep } = useBundleStore.getState();
 
   return (
     <div className="flex flex-col gap-[13px]">
