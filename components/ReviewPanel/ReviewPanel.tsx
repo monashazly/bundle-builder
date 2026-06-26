@@ -2,51 +2,40 @@
 
 import { useReviewItems, useTotals } from '@/hooks/useBundleStore';
 import { formatPrice } from '@/lib/calculations';
-import type { ConfigItem } from '@/lib/types';
 import { saveConfig } from '@/lib/api';
 import { useBundleStore } from '@/store/bundleStore';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ReviewLineItem } from './ReviewLineItem';
-
-function buildConfigItems(
-  variantQty: Record<string, Record<string, number>>,
-  singleQty: Record<string, number>
-): ConfigItem[] {
-  const items: ConfigItem[] = [];
-  for (const [productId, variants] of Object.entries(variantQty)) {
-    for (const [variantId, qty] of Object.entries(variants)) {
-      if (qty > 0) items.push({ productId, variantId, qty });
-    }
-  }
-  for (const [productId, qty] of Object.entries(singleQty)) {
-    if (qty > 0) items.push({ productId, qty });
-  }
-  return items;
-}
 
 export function ReviewPanel() {
   const items = useReviewItems();
   const totals = useTotals();
   const categories = useBundleStore((s) => s.categories);
-  const variantQty = useBundleStore((s) => s.variantQty);
-  const singleQty = useBundleStore((s) => s.singleQty);
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
 
-  const groupedItems = categories
-    .map((cat) => ({
-      label: cat.label.toUpperCase(),
-      categoryId: cat.id,
-      items: items.filter((item) => cat.products.some((p) => p.id === item.product.id)),
-    }))
-    .filter((group) => group.items.length > 0);
+  const groupedItems = useMemo(
+    () =>
+      categories
+        .map((cat) => ({
+          label: cat.label.toUpperCase(),
+          categoryId: cat.id,
+          items: items.filter((item) => cat.products.some((p) => p.id === item.product.id)),
+        }))
+        .filter((group) => group.items.length > 0),
+    [categories, items]
+  );
 
   const handleSave = async () => {
-    const configItems = buildConfigItems(variantQty, singleQty);
+    const configItems = items.map(({ product, variant, qty }) => ({
+      productId: product.id,
+      ...(variant ? { variantId: variant.id } : {}),
+      qty,
+    }));
     const { id } = await saveConfig(configItems);
     localStorage.setItem('bundle-config-id', id);
     router.replace(`/?config=${id}`);

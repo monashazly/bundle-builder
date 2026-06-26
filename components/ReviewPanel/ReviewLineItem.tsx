@@ -13,24 +13,22 @@ interface ReviewLineItemProps {
 
 export function ReviewLineItem({ item, categoryId }: ReviewLineItemProps) {
   const { product, variant, qty, linePrice, lineCompareAt } = item;
-  const store = useBundleStore();
+  // Actions are stable refs — no subscription needed
+  const { incrementVariant, decrementVariant, incrementSingle, decrementSingle } =
+    useBundleStore.getState();
   const isPlan = categoryId === 'plan';
 
   const displayName = variant ? `${product.name} — ${variant.label}` : product.name;
 
   const increment = () =>
-    variant ? store.incrementVariant(product.id, variant.id) : store.incrementSingle(product.id);
+    variant ? incrementVariant(product.id, variant.id) : incrementSingle(product.id);
 
   const decrement = () =>
-    variant ? store.decrementVariant(product.id, variant.id) : store.decrementSingle(product.id);
+    variant ? decrementVariant(product.id, variant.id) : decrementSingle(product.id);
 
-  const priceStr = isPlan ? `${formatPrice(linePrice)}/mo` : formatPrice(linePrice);
-  const compareAtStr =
-    lineCompareAt && lineCompareAt !== linePrice
-      ? isPlan
-        ? `${formatPrice(lineCompareAt)}/mo`
-        : formatPrice(lineCompareAt)
-      : null;
+  const fmt = (p: number) => formatPrice(p) + (isPlan ? '/mo' : '');
+  const priceStr = fmt(linePrice);
+  const compareAtStr = lineCompareAt && lineCompareAt !== linePrice ? fmt(lineCompareAt) : null;
 
   return (
     <div className="flex items-center gap-[16px]">
