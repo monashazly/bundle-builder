@@ -5,10 +5,6 @@ import type { BundleTotals, Category, ReviewLineItem } from '@/lib/types';
 import { useBundleStore as useStore } from '@/store/bundleStore';
 import { useMemo } from 'react';
 
-// Selectors that derive new arrays/objects must use useMemo to stabilise
-// the reference — Zustand uses Object.is by default, so a new array each
-// render would cause an infinite re-render loop.
-
 export function useReviewItems(): ReviewLineItem[] {
   const categories = useStore((s) => s.categories);
   const variantQty = useStore((s) => s.variantQty);
