@@ -44,6 +44,9 @@ next-env.d.ts
 
 /lib/generated/prisma
 
+# Claude Code — local machine-specific permissions, never commit
+.claude/settings.local.json
+
 # Prisma — SQLite database files (auto-generated)
 prisma/dev.db
 prisma/test.db
