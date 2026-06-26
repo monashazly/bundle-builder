@@ -2,40 +2,49 @@
 
 import { cn } from '@/lib/cn';
 import type { Variant } from '@/lib/types';
+import Image from 'next/image';
 
 interface VariantSelectorProps {
   variants: Variant[];
   selectedVariantId: string;
   onSelect: (variantId: string) => void;
+  productImage?: string;
 }
 
-export function VariantSelector({ variants, selectedVariantId, onSelect }: VariantSelectorProps) {
+export function VariantSelector({
+  variants,
+  selectedVariantId,
+  onSelect,
+  productImage,
+}: VariantSelectorProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-[6px]">
       {variants.map((variant) => {
         const isSelected = variant.id === selectedVariantId;
-        const isWhite = variant.color.toUpperCase() === '#FFFFFF';
-
         return (
           <button
             key={variant.id}
             type="button"
             onClick={() => onSelect(variant.id)}
             className={cn(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-sm cursor-pointer transition-colors',
+              'flex items-center justify-center gap-[4px] w-[65px] h-[26px] px-[3px] py-[1px] rounded-[2px] cursor-pointer transition-colors',
               isSelected
-                ? 'border-brand-600 bg-brand-50 text-brand-700'
-                : 'border-border-default bg-surface-card text-text-primary hover:border-gray-400'
+                ? 'border-[0.5px] border-[#0AA288] bg-[rgba(29,240,187,0.04)]'
+                : 'border-[0.5px] border-[#CCCCCC] bg-white'
             )}
           >
-            <span
-              className={cn(
-                'w-3.5 h-3.5 rounded-full border flex-shrink-0',
-                isWhite ? 'border-gray-300' : 'border-gray-200'
-              )}
-              style={{ backgroundColor: variant.color }}
-            />
-            {variant.label}
+            {productImage && (
+              <Image
+                src={productImage}
+                alt={variant.label}
+                width={22}
+                height={22}
+                className="w-[22px] h-[22px] rounded-[5px] object-contain flex-shrink-0"
+              />
+            )}
+            <span className="text-[10px] text-[#1F1F1F] tracking-[0.6px] leading-none whitespace-nowrap">
+              {variant.label}
+            </span>
           </button>
         );
       })}

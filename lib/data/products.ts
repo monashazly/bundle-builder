@@ -1,14 +1,9 @@
-// lib/data/products.ts
-// Seed data — imported ONLY by app/api/products/route.ts.
-// Nothing in components or the store imports this directly.
-// When a real database arrives, only the Route Handler changes.
-
 import type { Category } from '../types';
 
 export const CATEGORIES: Category[] = [
   {
     id: 'cameras',
-    label: 'Cameras',
+    label: 'Choose your cameras',
     stepIndex: 1,
     products: [
       {
@@ -19,7 +14,7 @@ export const CATEGORIES: Category[] = [
         badge: 'Save 22%',
         compareAtPrice: 199,
         price: 155,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
         variants: [
           { id: 'cam-outdoor-pro-white', label: 'White', color: '#FFFFFF' },
           { id: 'cam-outdoor-pro-black', label: 'Black', color: '#1F2937' },
@@ -33,7 +28,7 @@ export const CATEGORIES: Category[] = [
         badge: 'Save 18%',
         compareAtPrice: 149,
         price: 122,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
         variants: [
           { id: 'cam-indoor-white', label: 'White', color: '#FFFFFF' },
           { id: 'cam-indoor-black', label: 'Black', color: '#1F2937' },
@@ -46,7 +41,7 @@ export const CATEGORIES: Category[] = [
         image: '/images/cam-doorbell.png',
         compareAtPrice: 179,
         price: 149,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
         // No variants — single stepper
       },
       {
@@ -57,7 +52,7 @@ export const CATEGORIES: Category[] = [
         badge: 'Save 15%',
         compareAtPrice: 249,
         price: 212,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
         variants: [
           { id: 'cam-floodlight-white', label: 'White', color: '#FFFFFF' },
           { id: 'cam-floodlight-black', label: 'Black', color: '#1F2937' },
@@ -67,41 +62,41 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'plan',
-    label: 'Plan',
+    label: 'Choose your plan',
     stepIndex: 2,
     products: [
       {
         id: 'plan-basic',
         name: 'Basic Plan',
         description: 'Live view, motion alerts, 7-day cloud storage',
-        image: '/images/plan-basic.png',
+        image: '/images/plan-basic.svg',
         price: 0,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'plan-standard',
         name: 'Standard Plan',
         description: '30-day cloud storage, professional monitoring',
-        image: '/images/plan-standard.png',
+        image: '/images/plan-standard.svg',
         badge: 'Most popular',
         compareAtPrice: 19.99,
         price: 14.99,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'plan-premium',
         name: 'Premium Plan',
         description: '60-day storage, 24/7 monitoring, priority support',
-        image: '/images/plan-premium.png',
+        image: '/images/plan-premium.svg',
         compareAtPrice: 29.99,
         price: 24.99,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
     ],
   },
   {
     id: 'sensors',
-    label: 'Sensors',
+    label: 'Choose your sensors',
     stepIndex: 3,
     products: [
       {
@@ -112,7 +107,7 @@ export const CATEGORIES: Category[] = [
         badge: 'Save 20%',
         compareAtPrice: 29,
         price: 23,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'sensor-motion',
@@ -122,25 +117,25 @@ export const CATEGORIES: Category[] = [
         badge: 'Save 17%',
         compareAtPrice: 35,
         price: 29,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'sensor-glass',
         name: 'Glass Break Sensor',
         description: 'Detects glass breaking within 25 feet',
-        image: '/images/sensor-glass.png',
+        image: '/images/sensor-glass.svg',
         compareAtPrice: 45,
         price: 39,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'sensor-smoke',
         name: 'Smoke & CO Detector',
         description: 'Dual-sensor, interconnected alerts',
-        image: '/images/sensor-smoke.png',
+        image: '/images/sensor-smoke.svg',
         compareAtPrice: 59,
         price: 49,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
     ],
   },
@@ -153,20 +148,20 @@ export const CATEGORIES: Category[] = [
         id: 'extra-keypad',
         name: 'Keypad',
         description: 'Backlit, arm/disarm with PIN or fingerprint',
-        image: '/images/extra-keypad.png',
+        image: '/images/extra-keypad.svg',
         badge: 'Save 10%',
         compareAtPrice: 69,
         price: 62,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'extra-siren',
         name: 'Outdoor Siren',
         description: '105dB alarm, strobe light, weatherproof',
-        image: '/images/extra-siren.png',
+        image: '/images/extra-siren.svg',
         compareAtPrice: 79,
         price: 69,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
       {
         id: 'extra-range-extender',
@@ -174,7 +169,7 @@ export const CATEGORIES: Category[] = [
         description: 'Extends sensor range up to 1000 feet',
         image: '/images/extra-range-extender.png',
         price: 39,
-        learnMoreUrl: '#',
+        learnMoreUrl: 'https://ecomexperts.io/',
       },
     ],
   },

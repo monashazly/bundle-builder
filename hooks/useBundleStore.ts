@@ -3,14 +3,25 @@
 import { computeTotals, getReviewLineItems, getSelectedCountForStep } from '@/lib/calculations';
 import type { BundleTotals, Category, ReviewLineItem } from '@/lib/types';
 import { useBundleStore as useStore } from '@/store/bundleStore';
+import { useMemo } from 'react';
+
+// Selectors that derive new arrays/objects must use useMemo to stabilise
+// the reference — Zustand uses Object.is by default, so a new array each
+// render would cause an infinite re-render loop.
 
 export function useReviewItems(): ReviewLineItem[] {
-  return useStore((s) => getReviewLineItems(s.categories, s.variantQty, s.singleQty));
+  const categories = useStore((s) => s.categories);
+  const variantQty = useStore((s) => s.variantQty);
+  const singleQty = useStore((s) => s.singleQty);
+  return useMemo(
+    () => getReviewLineItems(categories, variantQty, singleQty),
+    [categories, variantQty, singleQty]
+  );
 }
 
 export function useTotals(): BundleTotals {
   const items = useReviewItems();
-  return computeTotals(items);
+  return useMemo(() => computeTotals(items), [items]);
 }
 
 export function useSelectedCount(stepIndex: number): number {

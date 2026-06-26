@@ -4,14 +4,13 @@ import { ProductCard } from '@/components/ProductCard';
 import { useSelectedCount } from '@/hooks/useBundleStore';
 import { cn } from '@/lib/cn';
 import type { Category } from '@/lib/types';
-import { Camera, ChevronDown, ChevronUp, Plus, Shield, Wifi } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { CameraIcon, CaretDownIcon, CaretUpIcon, ExtrasIcon, PlanIcon, SensorsIcon } from './icons';
 
-const STEP_ICONS: Record<string, LucideIcon> = {
-  cameras: Camera,
-  plan: Shield,
-  sensors: Wifi,
-  extras: Plus,
+const STEP_ICONS: Record<string, () => React.JSX.Element> = {
+  cameras: CameraIcon,
+  plan: PlanIcon,
+  sensors: SensorsIcon,
+  extras: ExtrasIcon,
 };
 
 interface AccordionStepProps {
@@ -30,65 +29,83 @@ export function AccordionStep({
   nextLabel,
 }: AccordionStepProps) {
   const selectedCount = useSelectedCount(category.stepIndex);
-  const Icon = STEP_ICONS[category.id] ?? Plus;
+  const Icon = STEP_ICONS[category.id] ?? ExtrasIcon;
   const isDone = nextLabel === 'Done';
 
   return (
-    <div
-      className={cn(
-        'bg-surface-card rounded-2xl border shadow-sm overflow-hidden',
-        isActive ? 'border-brand-600' : 'border-border-default'
-      )}
-    >
-      {/* Header */}
+    <div className={cn(isActive ? 'bg-secondary-active rounded-[10px] pt-[15px]' : '')}>
+      {/* Toggle button */}
       <button
         type="button"
-        className="w-full flex items-center gap-3 px-5 py-4 cursor-pointer select-none hover:bg-surface-subtle text-left"
+        className="w-full flex flex-col text-left cursor-pointer select-none px-[15px] pt-[5px]"
         onClick={onToggle}
         aria-expanded={isActive}
       >
-        <span className="text-xs font-medium uppercase tracking-widest text-text-muted whitespace-nowrap">
+        <span
+          className={cn(
+            'uppercase tracking-[1.6px] text-text-step',
+            isActive ? 'text-[12px]' : 'text-[10px]'
+          )}
+        >
           Step {category.stepIndex} of 4
         </span>
-        <Icon size={20} className="text-text-muted flex-shrink-0" />
-        <span className="text-base font-medium text-text-primary">{category.label}</span>
 
-        <div className="flex items-center gap-2 ml-auto">
-          {isActive && selectedCount > 0 && (
-            <span className="text-sm bg-gray-100 text-text-muted px-2.5 py-0.5 rounded-full whitespace-nowrap">
-              {selectedCount} selected
+        <div
+          className={cn(
+            'flex items-center justify-between py-[20px] border-t border-t-[0.5px] border-[#1F1F1F] mt-[5px] -mx-[15px] w-[calc(100%+30px)] px-[15px]',
+            !isActive && 'border-b border-b-[0.5px]'
+          )}
+        >
+          <div className="flex flex-1 items-center gap-[8px] min-w-0">
+            <span className="flex-shrink-0">
+              <Icon />
             </span>
-          )}
-          {isActive ? (
-            <ChevronUp size={18} className="text-text-muted flex-shrink-0" />
-          ) : (
-            <ChevronDown size={18} className="text-text-muted flex-shrink-0" />
-          )}
+            <span className="flex-1 text-[22px] font-semibold text-text-obsidian leading-none">
+              {category.label}
+            </span>
+          </div>
+          <div className="flex items-center gap-[4px] flex-shrink-0">
+            {isActive && selectedCount > 0 && (
+              <span className="text-[14px] font-medium text-prim-600">
+                {selectedCount} selected
+              </span>
+            )}
+            {isActive ? <CaretUpIcon /> : <CaretDownIcon />}
+          </div>
         </div>
       </button>
 
-      {/* Body — only rendered when active */}
-      {isActive && (
-        <div className="bg-surface-active px-5 pb-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-            {category.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+      {/* Animated body — CSS grid row trick gives natural height transition */}
+      <div
+        data-accordion-panel
+        aria-hidden={!isActive}
+        className={cn(
+          'grid transition-[grid-template-rows] duration-300 ease-in-out',
+          isActive ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="px-[15px] pb-[20px] flex flex-col gap-[15px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-[15px]">
+              {category.products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
 
-          <button
-            type="button"
-            className={cn(
-              'w-full mt-5 py-3 px-4 text-text-on-brand font-medium rounded-xl transition-colors',
-              isDone ? 'bg-brand-600 opacity-50 cursor-default' : 'bg-brand-600 hover:bg-brand-700'
-            )}
-            onClick={isDone ? undefined : onNext}
-            disabled={isDone}
-          >
-            {nextLabel}
-          </button>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className={cn(
+                  'px-[24px] py-[5px] border border-prim-600 rounded-[7px] text-[18px] font-semibold text-prim-600 transition-opacity'
+                )}
+                onClick={isDone ? onToggle : onNext}
+              >
+                {nextLabel}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

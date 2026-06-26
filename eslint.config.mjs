@@ -20,7 +20,16 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'node_modules/**'],
+    ignores: [
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+      'node_modules/**',
+      'Build pixel-perfect design/**',
+      'lib/generated/**',
+      'prisma.config.ts',
+    ],
   },
 ];
 

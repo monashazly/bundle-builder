@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="12" fill="#EEF2FF"/>
+  <rect x="16" y="14" width="48" height="52" rx="6" fill="#818CF8"/>
+  <polygon points="40,20 44,32 56,32 47,40 50,52 40,44 30,52 33,40 24,32 36,32" fill="#4F46E5"/>
+  <text x="40" y="74" font-family="system-ui" font-size="6" fill="#4338CA" text-anchor="middle">Standard Plan</text>
+</svg>

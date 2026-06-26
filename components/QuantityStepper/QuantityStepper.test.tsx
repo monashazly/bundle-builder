@@ -35,9 +35,9 @@ describe('QuantityStepper', () => {
     expect(screen.getByRole('button', { name: /decrease/i })).toBeDisabled();
   });
 
-  it('size sm renders smaller buttons with class w-6', () => {
+  it('size sm renders 20px buttons', () => {
     render(<QuantityStepper value={1} onIncrement={vi.fn()} onDecrement={vi.fn()} size="sm" />);
     const buttons = screen.getAllByRole('button');
-    buttons.forEach((btn) => expect(btn.className).toContain('w-6'));
+    buttons.forEach((btn) => expect(btn.className).toContain('w-[20px]'));
   });
 });

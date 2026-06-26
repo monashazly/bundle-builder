@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="12" fill="#FDF4FF"/>
+  <rect x="20" y="12" width="26" height="48" rx="4" fill="#E879F9"/>
+  <rect x="46" y="12" width="14" height="48" rx="4" fill="#D946EF"/>
+  <circle cx="43" cy="38" r="3" fill="#A21CAF"/>
+  <text x="40" y="70" font-family="system-ui" font-size="6" fill="#A21CAF" text-anchor="middle">Door Sensor</text>
+</svg>

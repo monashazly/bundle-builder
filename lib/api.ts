@@ -7,17 +7,15 @@
 
 import type { Category, ConfigItem, SaveConfigResponse } from './types';
 
-export interface InitialData {
+export interface CatalogData {
   categories: Category[];
-  initialSingleQty: Record<string, number>;
-  initialVariantQty: Record<string, Record<string, number>>;
 }
 
-export async function fetchInitialData(): Promise<InitialData> {
-  const res = await fetch('/api/products', { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Failed to load products: ${res.status}`);
+export async function fetchCatalog(): Promise<CatalogData> {
+  const res = await fetch('/api/catalog', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to load catalog: ${res.status}`);
   const json = await res.json();
-  return json.data as InitialData;
+  return json.data as CatalogData;
 }
 
 export async function saveConfig(items: ConfigItem[]): Promise<SaveConfigResponse> {

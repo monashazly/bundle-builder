@@ -1,17 +1,18 @@
 // @vitest-environment node
 import { NextRequest } from 'next/server';
 import { afterEach, describe, expect, it } from 'vitest';
+import { prisma } from '@/lib/prisma';
 import { GET as getConfigs } from '../configs/[id]/route';
-import { configs, POST as postConfigs } from '../configs/route';
-import { GET as getProducts } from '../products/route';
+import { POST as postConfigs } from '../configs/route';
+import { GET as getCatalog } from '../catalog/route';
 
-afterEach(() => {
-  configs.clear();
+afterEach(async () => {
+  await prisma.config.deleteMany();
 });
 
-describe('GET /api/products', () => {
+describe('GET /api/catalog', () => {
   it('returns 200 with a data.categories array of length 4', async () => {
-    const res = await getProducts();
+    const res = await getCatalog();
     const json = await res.json();
 
     expect(res.status).toBe(200);
@@ -19,12 +20,12 @@ describe('GET /api/products', () => {
     expect(json.data.categories).toHaveLength(4);
   });
 
-  it('includes initialSingleQty and initialVariantQty', async () => {
-    const res = await getProducts();
+  it('each category includes products with variants', async () => {
+    const res = await getCatalog();
     const json = await res.json();
 
-    expect(json.data).toHaveProperty('initialSingleQty');
-    expect(json.data).toHaveProperty('initialVariantQty');
+    const first = json.data.categories[0];
+    expect(Array.isArray(first.products)).toBe(true);
   });
 });
 
@@ -70,7 +71,7 @@ describe('GET /api/configs/[id]', () => {
     const postRes = await postConfigs(postReq);
     const { data } = await postRes.json();
 
-    const getRes = await getConfigs(new Request('http://localhost'), {
+    const getRes = await getConfigs(new NextRequest('http://localhost'), {
       params: Promise.resolve({ id: data.id }),
     });
     const getJson = await getRes.json();
@@ -80,7 +81,7 @@ describe('GET /api/configs/[id]', () => {
   });
 
   it('returns 404 for a nonexistent id', async () => {
-    const res = await getConfigs(new Request('http://localhost'), {
+    const res = await getConfigs(new NextRequest('http://localhost'), {
       params: Promise.resolve({ id: 'nonexistent' }),
     });
     const json = await res.json();

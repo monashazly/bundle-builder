@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="12" fill="#FFF7ED"/>
+  <rect x="24" y="24" width="32" height="36" rx="8" fill="#FB923C"/>
+  <rect x="28" y="28" width="24" height="6" rx="3" fill="#EA580C"/>
+  <rect x="28" y="38" width="24" height="6" rx="3" fill="#EA580C"/>
+  <rect x="28" y="48" width="24" height="6" rx="3" fill="#EA580C"/>
+  <path d="M14 20 Q18 36 14 52" stroke="#FED7AA" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M66 20 Q62 36 66 52" stroke="#FED7AA" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <text x="40" y="72" font-family="system-ui" font-size="7" fill="#C2410C" text-anchor="middle">Siren</text>
+</svg>

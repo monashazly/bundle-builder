@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="12" fill="#FFF1F2"/>
+  <circle cx="40" cy="38" r="22" fill="#FB7185"/>
+  <circle cx="40" cy="38" r="14" fill="#E11D48"/>
+  <circle cx="40" cy="38" r="6" fill="#FFF1F2"/>
+  <path d="M34 18 Q36 12 38 18 Q40 12 42 18 Q44 12 46 18" stroke="#FDA4AF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <text x="40" y="72" font-family="system-ui" font-size="6" fill="#BE123C" text-anchor="middle">Smoke &amp; CO</text>
+</svg>

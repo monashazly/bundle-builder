@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="12" fill="#F0FDF4"/>
+  <rect x="16" y="14" width="48" height="52" rx="6" fill="#86EFAC"/>
+  <rect x="24" y="24" width="32" height="4" rx="2" fill="#16A34A"/>
+  <rect x="24" y="34" width="24" height="4" rx="2" fill="#16A34A"/>
+  <rect x="24" y="44" width="28" height="4" rx="2" fill="#16A34A"/>
+  <text x="40" y="74" font-family="system-ui" font-size="7" fill="#16A34A" text-anchor="middle">Basic Plan</text>
+</svg>

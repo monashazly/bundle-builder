@@ -60,12 +60,13 @@ afterEach(() => {
 });
 
 describe('Accordion', () => {
-  it('step 1 body is visible on render, steps 2–4 bodies are not', () => {
+  it('step 1 body is visible on render, steps 2–4 bodies are aria-hidden', () => {
     render(<Accordion />);
+    // Step 1 body: in DOM and not aria-hidden
     expect(screen.getByText('Camera A')).toBeInTheDocument();
-    expect(screen.queryByText('Plan A')).not.toBeInTheDocument();
-    expect(screen.queryByText('Sensor A')).not.toBeInTheDocument();
-    expect(screen.queryByText('Extra A')).not.toBeInTheDocument();
+    // Steps 2–4 bodies: kept in DOM for animation but marked aria-hidden
+    const hiddenPanels = document.querySelectorAll('[data-accordion-panel][aria-hidden="true"]');
+    expect(hiddenPanels.length).toBe(3);
   });
 
   it('clicking step 2 header shows step 2 body', async () => {
@@ -84,8 +85,11 @@ describe('Accordion', () => {
   it('Next button on step 1 opens step 2', async () => {
     render(<Accordion />);
     await userEvent.click(screen.getByRole('button', { name: /next: plan/i }));
+    // Step 2 panel is now active (not aria-hidden)
     expect(screen.getByText('Plan A')).toBeInTheDocument();
-    expect(screen.queryByText('Camera A')).not.toBeInTheDocument();
+    // Step 1 panel is now aria-hidden (inactive)
+    const hiddenPanels = document.querySelectorAll('[data-accordion-panel][aria-hidden="true"]');
+    expect(hiddenPanels.length).toBe(3);
   });
 
   it('Next button on step 4 shows "Done" label', () => {

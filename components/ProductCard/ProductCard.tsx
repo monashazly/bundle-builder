@@ -15,9 +15,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const hasVariants = !!product.variants?.length;
-
   const [selectedVariantId, setSelectedVariantId] = useState(product.variants?.[0]?.id ?? '');
-
   const store = useBundleStore();
 
   const qty = useBundleStore((s) =>
@@ -46,61 +44,56 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div
       className={cn(
-        'relative flex flex-row gap-3 p-4 bg-surface-card rounded-2xl shadow-sm transition-colors cursor-default',
-        isSelected ? 'border-2 border-border-selected' : 'border border-border-default'
+        'relative flex flex-row bg-white rounded-[10px] transition-colors overflow-hidden p-[11px] gap-[19px]',
+        isSelected ? 'border-2 border-[rgba(78,47,210,0.7)]' : 'border border-border-default'
       )}
     >
-      {product.badge && (
-        <span className="absolute top-3 left-3 z-10 bg-brand-900 text-text-on-brand text-xs font-semibold px-2 py-0.5 rounded-full">
-          {product.badge}
-        </span>
-      )}
-
-      {/* Left: product image */}
-      <div className="flex-shrink-0 w-20 flex items-center justify-center pt-5">
-        <Image
-          src={product.image}
-          alt={product.name}
-          width={80}
-          height={80}
-          className="w-16 h-16 object-contain"
-        />
+      {/* Image — fixed 101×137px to match Figma */}
+      <div className="relative shrink-0 w-[101px] h-[137px] rounded-[5px] overflow-hidden bg-white">
+        <Image src={product.image} alt={product.name} fill className="object-contain" />
+        {product.badge && (
+          <span className="absolute top-0 left-0 z-10 bg-prim-600 text-white text-[12px] font-semibold px-[6px] py-[2px] rounded-[10px] leading-[normal]">
+            {product.badge}
+          </span>
+        )}
       </div>
 
-      {/* Right: content */}
-      <div className="flex flex-col flex-1 min-w-0">
-        <p className="font-medium text-text-primary text-sm mt-1">{product.name}</p>
-        <p className="text-xs text-text-muted mt-1 leading-snug">{product.description}</p>
-
-        {product.learnMoreUrl && (
-          <a
-            href={product.learnMoreUrl}
-            className="text-xs text-text-link mt-1 hover:underline w-fit"
-          >
-            Learn more
-          </a>
-        )}
+      {/* Content */}
+      <div className="flex flex-col flex-1 min-w-0 gap-[10px]">
+        <div className="flex flex-col gap-[8px] tracking-[0.6px]">
+          <p className="text-[16px] font-semibold text-[#1F1F1F] leading-none">{product.name}</p>
+          <p className="text-[12px] text-[rgba(31,31,31,0.75)] leading-[1.3] tracking-[0.6px]">
+            {product.description}
+          </p>
+          {product.learnMoreUrl && (
+            <a
+              href={product.learnMoreUrl}
+              className="text-[12px] text-[#0000ee] underline leading-none"
+            >
+              Learn More
+            </a>
+          )}
+        </div>
 
         {hasVariants && (
-          <div className="mt-2">
-            <VariantSelector
-              variants={product.variants!}
-              selectedVariantId={selectedVariantId}
-              onSelect={setSelectedVariantId}
-            />
-          </div>
+          <VariantSelector
+            variants={product.variants!}
+            selectedVariantId={selectedVariantId}
+            onSelect={setSelectedVariantId}
+            productImage={product.image}
+          />
         )}
 
-        <div className="flex items-center justify-between mt-3">
+        {/* Stepper + price */}
+        <div className="flex items-end gap-[10px] mt-auto">
           <QuantityStepper value={qty} onIncrement={increment} onDecrement={decrement} size="md" />
-
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-col items-end gap-[3px] ml-auto tracking-[0.6px]">
             {product.compareAtPrice && (
-              <span className="text-xs text-price-compare line-through">
+              <span className="text-[16px] text-price-card-compare line-through leading-none">
                 {formatPrice(product.compareAtPrice)}
               </span>
             )}
-            <span className="text-sm font-semibold text-brand-600">
+            <span className="text-[16px] text-price-card-current leading-none">
               {formatPrice(product.price)}
             </span>
           </div>
