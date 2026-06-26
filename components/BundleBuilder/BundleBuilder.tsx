@@ -23,16 +23,15 @@ function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) 
 }
 
 export function BundleBuilder() {
-  const init = useBundleStore((s) => s.init);
   const loading = useBundleStore((s) => s.loading);
   const error = useBundleStore((s) => s.error);
   const categories = useBundleStore((s) => s.categories);
 
   useEffect(() => {
-    init();
+    useBundleStore.getState().init();
   }, []);
 
-  if (error) return <ErrorState error={error} onRetry={init} />;
+  if (error) return <ErrorState error={error} onRetry={() => useBundleStore.getState().init()} />;
 
   const showSkeleton = loading || categories.length === 0;
 

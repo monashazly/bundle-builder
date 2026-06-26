@@ -29,7 +29,7 @@ interface BundleStore {
   decrementSingle: (productId: string) => void;
 }
 
-export const useBundleStore = create<BundleStore>((set) => ({
+export const useBundleStore = create<BundleStore>((set, get) => ({
   categories: [],
   loading: false,
   error: null,
@@ -38,38 +38,39 @@ export const useBundleStore = create<BundleStore>((set) => ({
   singleQty: {},
 
   init: async () => {
+    // Prevent Strict Mode double-invoke and concurrent calls
+    if (get().loading || get().categories.length > 0) return;
     set({ loading: true, error: null });
 
     try {
-      const { categories } = await fetchCatalog();
-
+      // Read configId synchronously first so both fetches can fire in parallel
       const urlConfigId = new URLSearchParams(window.location.search).get('config') ?? undefined;
       const configId = urlConfigId ?? localStorage.getItem('bundle-config-id') ?? undefined;
 
-      if (configId) {
-        try {
-          const items = await fetchConfig(configId);
-          const variantQty: Record<string, Record<string, number>> = {};
-          const singleQty: Record<string, number> = {};
-          for (const item of items) {
-            if (item.variantId) {
-              variantQty[item.productId] ??= {};
-              variantQty[item.productId][item.variantId] = item.qty;
-            } else {
-              singleQty[item.productId] = item.qty;
-            }
+      const [{ categories }, configItems] = await Promise.all([
+        fetchCatalog(),
+        configId
+          ? fetchConfig(configId).catch(() => {
+              localStorage.removeItem('bundle-config-id');
+              return null;
+            })
+          : Promise.resolve(null),
+      ]);
+
+      if (configItems) {
+        const variantQty: Record<string, Record<string, number>> = {};
+        const singleQty: Record<string, number> = {};
+        for (const item of configItems) {
+          if (item.variantId) {
+            variantQty[item.productId] ??= {};
+            variantQty[item.productId][item.variantId] = item.qty;
+          } else {
+            singleQty[item.productId] = item.qty;
           }
-          set({ categories, variantQty, singleQty, loading: false });
-        } catch {
-          localStorage.removeItem('bundle-config-id');
-          const defaults = { ...DEFAULT_SINGLE_QTY };
-          localStorage.setItem('bundle-default-qty', JSON.stringify(defaults));
-          set({ categories, singleQty: defaults, loading: false });
         }
+        set({ categories, variantQty, singleQty, loading: false });
       } else {
-        const defaults = { ...DEFAULT_SINGLE_QTY };
-        localStorage.setItem('bundle-default-qty', JSON.stringify(defaults));
-        set({ categories, singleQty: defaults, loading: false });
+        set({ categories, singleQty: { ...DEFAULT_SINGLE_QTY }, loading: false });
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load products';
